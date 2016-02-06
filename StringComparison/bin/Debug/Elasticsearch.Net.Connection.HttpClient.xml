@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Elasticsearch.Net.Connection.HttpClient</name>
+    </assembly>
+    <members>
+        <member name="T:Elasticsearch.Net.Connection.HttpClientConnection">
+            <summary>
+            IConnection implemented using <see cref="T:System.Net.Http.HttpClient"/>
+            </summary>
+        </member>
+        <member name="M:Elasticsearch.Net.Connection.HttpClientConnection.#ctor(Elasticsearch.Net.Connection.IConnectionConfigurationValues,System.Net.Http.HttpClientHandler)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Elasticsearch.Net.Connection.HttpClientConnection"/> class.
+            </summary>
+            <param name="settings">The settings.</param>
+            <param name="handler">The handler.</param>
+        </member>
+        <member name="P:Elasticsearch.Net.Connection.HttpClientConnection.DefaultContentType">
+            <summary>
+            Gets or sets the default type of the content.
+            </summary>
+            <value>The default type of the content.</value>
+        </member>
+        <member name="P:Elasticsearch.Net.Connection.HttpClientConnection.IsDisposed">
+            <summary>
+            Gets a value indicating whether this instance is disposed.
+            </summary>
+            <value><c>true</c> if this instance is disposed; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Elasticsearch.Net.Connection.HttpClientConnection.Client">
+            <summary>
+            Gets the client.
+            </summary>
+            <value>The client.</value>
+        </member>
+        <member name="M:Elasticsearch.Net.Connection.HttpClientConnection.DoRequestSync(System.Net.Http.HttpMethod,System.Uri,System.Byte[],Elasticsearch.Net.Connection.Configuration.IRequestConfiguration)">
+            <summary>
+            Wraps the DoRequest to run synchronously
+            </summary>
+            <param name="method">The method.</param>
+            <param name="uri">The URI.</param>
+            <param name="data">The data.</param>
+            <param name="requestSpecificConfig">The request specific configuration.</param>
+            <returns>ElasticsearchResponse&lt;Stream&gt;.</returns>
+        </member>
+        <member name="M:Elasticsearch.Net.Connection.HttpClientConnection.DoRequest(System.Net.Http.HttpMethod,System.Uri,System.Byte[],Elasticsearch.Net.Connection.Configuration.IRequestConfiguration)">
+            <summary>
+            Makes an async call to the specified url. Uses the timeout from the IRequestSpecifiConfig is supplied, or the global timeout from settings.
+            </summary>
+            <param name="method">The method.</param>
+            <param name="uri">The URI.</param>
+            <param name="data">The data.</param>
+            <param name="requestSpecificConfig">The request specific configuration.</param>
+            <returns>Task&lt;ElasticsearchResponse&lt;Stream&gt;&gt;.</returns>
+        </member>
+        <member name="T:Elasticsearch.Net.Connection.InternalHttpMessageHandler">
+            <summary>
+            Internal Message Handler that is used by the HttpClientConnection. This class cannot be inherited.
+            </summary>
+        </member>
+        <member name="M:Elasticsearch.Net.Connection.InternalHttpMessageHandler.#ctor(System.Net.Http.HttpClientHandler)">
+            <summary>
+            Creates a new instance of the <see cref="T:System.Net.Http.DelegatingHandler" /> class with a specific inner handler.
+            </summary>
+            <param name="innerHandler">The inner handler which is responsible for processing the HTTP response messages.</param>
+        </member>
+        <member name="M:Elasticsearch.Net.Connection.InternalHttpMessageHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <summary>
+            Sends an HTTP request to the inner handler to send to the server as an asynchronous operation.
+            </summary>
+            <param name="request">The HTTP request message to send to the server.</param>
+            <param name="cancellationToken">A cancellation token to cancel operation.</param>
+            <returns>Returns <see cref="T:System.Threading.Tasks.Task`1" />. The task object representing the asynchronous operation.</returns>
+        </member>
+    </members>
+</doc>
