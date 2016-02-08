@@ -7,7 +7,7 @@ using System.Web.Script.Serialization;
 using Newtonsoft.Json;
 using System.IO;
 using Json;
-using Strabo.Core.TextRecognition;
+using Strabo.Core;
 using Strabo.Core.Utility;
 using com.wcohen.ss;
 using System.Text.RegularExpressions;
@@ -32,7 +32,8 @@ namespace StringComparison
                 String tempread = System.IO.File.ReadAllText(pathname);
                 var tempob = JsonParser.Deserialize(tempread);
                 var tempobs = tempob.features;
-                foreach(var item in tempobs){
+                foreach (var item in tempobs)
+                {
                     String inputname = item["NameBeforeDictionary"];
                     var obj = item["geometry"]["coordinates"];
                     double xcord = 0;
@@ -60,12 +61,12 @@ namespace StringComparison
                                 ylength = Math.Abs(ytemp - inneritem[1]);
                                 ycord = Math.Min(ytemp, inneritem[1]) + ylength / 2;
                             }
-                        }                          
-                       // xcord += inneritem[0];
-                       // ycord += inneritem[1];
+                        }
+                        // xcord += inneritem[0];
+                        // ycord += inneritem[1];
                     }
                     //xcord /= 4;
-                   //ycord /= 4;
+                    //ycord /= 4;
                     stringholder ts = new stringholder(inputname, xcord, ycord);
                     double ratio = xlength / ylength;
                     if (ratio > 2)
@@ -98,145 +99,145 @@ namespace StringComparison
                 {
                     if (!hack[i][j].flag)
                     {
-                    queue1.Enqueue(hack[i][j]);
-                    hack[i][j].flag = true;
-                    while (queue1.Count() > 0)
-                    {
-                        stringholder tempstring = queue1.Dequeue();
-                        listtemp.Add(tempstring);
-                        if (tempstring.doable == true)
+                        queue1.Enqueue(hack[i][j]);
+                        hack[i][j].flag = true;
+                        while (queue1.Count() > 0)
                         {
-                            for (int k = 0; k < hack[i].Count(); k++)
+                            stringholder tempstring = queue1.Dequeue();
+                            listtemp.Add(tempstring);
+                            if (tempstring.doable == true)
                             {
-                                if (!hack[i][k].flag)
+                                for (int k = 0; k < hack[i].Count(); k++)
                                 {
-                                    //double dis = Math.Sqrt(Math.Pow((tempstring.xcord - hack[i][k].xcord), 2) + Math.Pow((tempstring.ycord - hack[i][k].ycord), 2));
-                                    double xdis = Math.Abs(tempstring.xcord - hack[i][k].xcord) - tempstring.length / 2 - hack[i][k].length/2;
-                                    //double ydis = Math.Abs(tempstring.ycord - hack[i][k].ycord) -tempstring.height / 2 - hack[i][k].height / 2;
-                                    double ydis = Math.Abs(tempstring.ycord - hack[i][k].ycord);
-                                    double xthrs = Math.Max(tempstring.height, hack[i][k].height)*4;
-                                    //double ythrs = tempstring.height /5;
-                                    double ythrs = tempstring.height*2;
-                                    double heightratio = Math.Max(tempstring.height, hack[i][k].height) / Math.Min(tempstring.height, hack[i][k].height);
-                                    if (ydis <= ythrs && xdis < xthrs && heightratio < 1.8)
+                                    if (!hack[i][k].flag)
                                     {
-                                        if (hack[i][k].doable == true)
+                                        //double dis = Math.Sqrt(Math.Pow((tempstring.xcord - hack[i][k].xcord), 2) + Math.Pow((tempstring.ycord - hack[i][k].ycord), 2));
+                                        double xdis = Math.Abs(tempstring.xcord - hack[i][k].xcord) - tempstring.length / 2 - hack[i][k].length / 2;
+                                        //double ydis = Math.Abs(tempstring.ycord - hack[i][k].ycord) -tempstring.height / 2 - hack[i][k].height / 2;
+                                        double ydis = Math.Abs(tempstring.ycord - hack[i][k].ycord);
+                                        double xthrs = Math.Max(tempstring.height, hack[i][k].height) * 4;
+                                        //double ythrs = tempstring.height /5;
+                                        double ythrs = tempstring.height * 2;
+                                        double heightratio = Math.Max(tempstring.height, hack[i][k].height) / Math.Min(tempstring.height, hack[i][k].height);
+                                        if (ydis <= ythrs && xdis < xthrs && heightratio < 1.8)
                                         {
+                                            if (hack[i][k].doable == true)
+                                            {
 
 
-                                            queue1.Enqueue(hack[i][k]);
-                                            hack[i][k].flag = true;
+                                                queue1.Enqueue(hack[i][k]);
+                                                hack[i][k].flag = true;
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
 
-                    }
-                    if (listtemp.Count == 1)
-                    {
+                        }
+                        if (listtemp.Count == 1)
+                        {
 
                             listnew.Add(listtemp[0]);
-                    }
-                    else
-                    {
-
-                        List<stringholder> te = new List<stringholder>();
-                        for (int ii = 0; ii < listtemp.Count; ii++)
+                        }
+                        else
                         {
-                            if (te.Count == 0)
-                                te.Add(listtemp[ii]);
-                            else
-                            {
-                                bool flag = false;
-                                for (int jj = 0; jj < te.Count; jj++)
-                                {
 
-                                    if (Math.Abs(te[jj].ycord - listtemp[ii].ycord) < 10)
+                            List<stringholder> te = new List<stringholder>();
+                            for (int ii = 0; ii < listtemp.Count; ii++)
+                            {
+                                if (te.Count == 0)
+                                    te.Add(listtemp[ii]);
+                                else
+                                {
+                                    bool flag = false;
+                                    for (int jj = 0; jj < te.Count; jj++)
                                     {
-                                        if (te[jj].xcord > listtemp[ii].xcord)
+
+                                        if (Math.Abs(te[jj].ycord - listtemp[ii].ycord) < 10)
+                                        {
+                                            if (te[jj].xcord > listtemp[ii].xcord)
+                                            {
+                                                te.Insert(jj, listtemp[ii]);
+                                                flag = true;
+                                                break;
+                                            }
+                                        }
+                                        else if (te[jj].ycord < listtemp[ii].ycord)
                                         {
                                             te.Insert(jj, listtemp[ii]);
                                             flag = true;
                                             break;
                                         }
                                     }
-                                    else if (te[jj].ycord < listtemp[ii].ycord)
-                                    {
-                                        te.Insert(jj, listtemp[ii]);
-                                        flag = true;
-                                        break;
-                                    }
+                                    if (!flag)
+                                        te.Add(listtemp[ii]);
                                 }
-                                if (!flag)
-                                    te.Add(listtemp[ii]);
                             }
-                        }
-                        //RONALD
-                        int left_bound = 0;
-                        for (int ii = te.Count; ii > left_bound; ii--)
-                        {
-                            bool found = false;
-                            int bitmask = Convert.ToInt32(Math.Pow(2, ii)-1);
-                            //while (bitmask >= 0)
+                            //RONALD
+                            int left_bound = 0;
+                            for (int ii = te.Count; ii > left_bound; ii--)
                             {
-                                string check = "";
-                                for(int jj=left_bound; jj<ii;jj++)
+                                bool found = false;
+                                int bitmask = Convert.ToInt32(Math.Pow(2, ii) - 1);
+                                //while (bitmask >= 0)
                                 {
-                                    check += te[jj].st;
-                                    check += " ";
-                                }
-                                int fuzziness = 1;
-                                if (check.Length > 3)
-                                    fuzziness++;
-                                if (check.Length > 4)
-                                    fuzziness++;
-                                if (check.Length > 5)
-                                    fuzziness++;
-                                if (check.Length > 7)
-                                    fuzziness++;
-                                if (check.Length > 9)
-                                    fuzziness++;
-                                double minsim = 1- (double) fuzziness/(double) check.Length-.1;
-                                //double minsim = 0.7;
-                                var searchResults = client.Search<Strabo.Core.TextRecognition.CheckDictionaryElasticSearchTemp.Frequency>(s => s
-                                .From(0)
-                                 .Size(10)
-                                .Index("entity")
-                                .Type("entity")
-                                 .Query(q => q
-                               .FuzzyLikeThis(fz => fz.OnFields(w => w.name).LikeText(check).MaxQueryTerms(20000).MinimumSimilarity(minsim))
-                               )
-                                );
-                                if (searchResults.Documents.Count()>0)
-                                {
-                                    
-                                    double xcord = 0;
-                                    double ycord = 0;
+                                    string check = "";
                                     for (int jj = left_bound; jj < ii; jj++)
                                     {
-                                        xcord += te[jj].xcord;
-                                        ycord += te[jj].ycord;
+                                        check += te[jj].st;
+                                        check += " ";
                                     }
-                                    xcord /= te.Count;
-                                    ycord /= te.Count;
-                                    listnew.Add(new stringholder(check, xcord, ycord));
-                                    left_bound = ii;
-                                    ii = te.Count+1;
+                                    int fuzziness = 1;
+                                    if (check.Length > 3)
+                                        fuzziness++;
+                                    if (check.Length > 4)
+                                        fuzziness++;
+                                    if (check.Length > 5)
+                                        fuzziness++;
+                                    if (check.Length > 7)
+                                        fuzziness++;
+                                    if (check.Length > 9)
+                                        fuzziness++;
+                                    double minsim = 1 - (double)fuzziness / (double)check.Length - .1;
+                                    //double minsim = 0.7;
+                                    var searchResults = client.Search<Strabo.Core.TextRecognition.CheckDictionaryElasticSearchTemp.Frequency>(s => s
+                                    .From(0)
+                                     .Size(10)
+                                    .Index("entity")
+                                    .Type("entity")
+                                     .Query(q => q
+                                   .FuzzyLikeThis(fz => fz.OnFields(w => w.name).LikeText(check).MaxQueryTerms(20000).MinimumSimilarity(minsim))
+                                   )
+                                    );
+                                    if (searchResults.Documents.Count() > 0)
+                                    {
+
+                                        double xcord = 0;
+                                        double ycord = 0;
+                                        for (int jj = left_bound; jj < ii; jj++)
+                                        {
+                                            xcord += te[jj].xcord;
+                                            ycord += te[jj].ycord;
+                                        }
+                                        xcord /= te.Count;
+                                        ycord /= te.Count;
+                                        listnew.Add(new stringholder(check, xcord, ycord));
+                                        left_bound = ii;
+                                        ii = te.Count + 1;
+                                    }
                                 }
+
                             }
 
                         }
-                       
+                        listtemp.Clear();
                     }
-                    listtemp.Clear();
-                }
                 }
                 hack[i].Clear();
                 hack[i].AddRange(listnew);
                 listnew.Clear();
             }
-            
+
             // do the comparison
             List<String> result = new List<string>();
             StringComparison st = new StringComparison(hack);
@@ -252,16 +253,16 @@ namespace StringComparison
     public class StringStruct
     {
         public String selectedstring;
-       // public Dictionary<String, double> listofword;
+        // public Dictionary<String, double> listofword;
         public Dictionary<String, double> listofword;
-       // public List<Dictionary<String, double>> listofsepword;
+        // public List<Dictionary<String, double>> listofsepword;
         public double xcord;
         public double ycord;
 
         public StringStruct(String s)
         {
             this.selectedstring = s;
-            listofword = new Dictionary<String,double>();
+            listofword = new Dictionary<String, double>();
             //listofsepword = new List<Dictionary<String, double>>();
         }
     }
@@ -269,7 +270,7 @@ namespace StringComparison
     public class outputclass
     {
         public List<String> outputString = new List<string>();
-        public Dictionary<String, Double> outputDic = new Dictionary<string,double>();
+        public Dictionary<String, Double> outputDic = new Dictionary<string, double>();
     }
 
     public class stringholder
@@ -278,7 +279,7 @@ namespace StringComparison
         public double xcord;
         public double ycord;
         public bool flag = false;
-        public bool doable =false;
+        public bool doable = false;
         public double length = 0;
         public double height = 0;
 
@@ -305,14 +306,14 @@ namespace StringComparison
         public List<String> Doreplacement()
         {
 
-           //string tempt = CheckDictionaryElasticSearchTemp.getDictionaryWord(tr.dict_word3,2 );
+            //string tempt = CheckDictionaryElasticSearchTemp.getDictionaryWord(tr.dict_word3,2 );
 
             List<outputclass> OutputResult = new List<outputclass>();
 
             double thredsholdvalue = 0.5; // lowest value for string comparison
             List<String> Dic = new List<string>();
             int mincharcount = 4;
-           // String missingchar = null;
+            // String missingchar = null;
             JaccardDistance jc = new JaccardDistance(3);
             List<StringStruct> SelectedString = new List<StringStruct>();
             int z = TessResult.Count;
@@ -332,196 +333,204 @@ namespace StringComparison
                 if (TessResult[0][0].st.Count() > mincharcount)
                 {
 
-                outputclass temoutput = new outputclass();
+                    outputclass temoutput = new outputclass();
 
 
 
-                for (int s = 0; s < z; s++)
-                {
-                    SelectedString.Add(new StringStruct(null));
-
-                }
-
-                double value = 0;
-            
-                for (int i = 1; i < z; i++)
-                {
-                    value = 0;
-                    int jmark = -1;
-                    for (int j = 0; j < TessResult[i].Count(); j++)
+                    for (int s = 0; s < z; s++)
                     {
-                        if (!string.IsNullOrEmpty(TessResult[0][0].st) && !string.IsNullOrEmpty(TessResult[i][j].st))
-                        {
-                            //double tempS = Strabo.Core.TextRecognition.NeedlemanWunsch.findSimScore(TessResult[0][0].st, TessResult[i][j].st);
-                            double tempS = nd.score(TessResult[0][0].st, TessResult[i][j].st);
-                            double distance = Math.Sqrt(Math.Pow((TessResult[0][0].xcord - TessResult[i][j].xcord), 2) + Math.Pow((TessResult[0][0].ycord - TessResult[i][j].ycord), 2));
-                            double smithstemp = sm.score(TessResult[0][0].st, TessResult[i][j].st);
-                            tempS = Math.Max(tempS, smithstemp);
-                            sm.explainScore(TessResult[0][0].st, TessResult[i][j].st);
-                            if (distance < 300)
-                            {
-                                if (tempS > value && TessResult[i][j].st.Count() > mincharcount)
-                                {
-
-                                    value = tempS;
-                                    if (value >= (thredsholdvalue * 2 * TessResult[0][0].st.Count()))
-                                    {
-                                        SelectedString[i].selectedstring = TessResult[i][j].st.Trim();        // put string with the largest value into the list
-                                        jmark = j;
-                                        SelectedString[i].xcord = TessResult[i][j].xcord;
-                                        SelectedString[i].ycord = TessResult[i][j].ycord;
-                                    }
-                                }
-                               /* else
-                                {
-                                    String[] splitword1 = TessResult[0][0].st.Split(' ');
-                                    String[] splitword2 = TessResult[i][j].st.Split(' ');
-                                    List<String> foo1 = new List<string>();
-                                    List<String> foo2 = new List<string>();
-                                    for (int ti = 0; ti < splitword1.Count(); ti++)
-                                    {
-                                        if (!splitword1[ti].Equals(""))
-                                        {
-                                            foo1.Add(splitword1[ti]);
-                                        }
-                                    }
-                                    for (int ti = 0; ti < splitword2.Count(); ti++)
-                                    {
-                                        if (!splitword2[ti].Equals(""))
-                                        {
-                                            foo2.Add(splitword2[ti]);
-                                        }
-                                    }
-                                    if ((foo1.Count > 1 || foo2.Count > 1) && foo1.Count < 4 && foo2.Count < 4 )
-                                    {
-                                        double maxmatch = 0;
-                                        for (int index1 = 0; index1 < foo1.Count; index1++)
-                                        {
-                                            for (int index2 = 0; index2 < foo2.Count; index2++)
-                                            {
-                                                double insidetemp = Strabo.Core.TextRecognition.NeedlemanWunsch.findSimScore(foo1[index1], foo2[index2]);
-                                                insidetemp *= (TessResult[0][0].st.Count() / foo1[index1].Count());
-                                                if (insidetemp > maxmatch)
-                                                    maxmatch = insidetemp;
-                                            }
-                                        }
-                                        if (maxmatch > value && TessResult[i][j].st.Count() > 3)
-                                        {
-
-                                            value = maxmatch;
-                                            if (value >= (thredsholdvalue * 3 * TessResult[0][0].st.Count()))
-                                            {
-                                                SelectedString[i].selectedstring = TessResult[i][j].st.Trim();        // put string with the largest value into the list
-                                                jmark = j;
-                                            }
-                                        }
-                                    }
-                                }*/
-                            }
-                        }
+                        SelectedString.Add(new StringStruct(null));
 
                     }
-                    if (jmark >= 0)
-                        TessResult[i].RemoveAt(jmark);
 
-                }
-                SelectedString[0].selectedstring = TessResult[0][0].st;
-
-                // get all missing selectedstring
-                for (int e = 1; e < SelectedString.Count(); e++)
-                {
-                    if (!String.IsNullOrEmpty(SelectedString[e].selectedstring))
+                    double value = 0;
+                    for (int base1 = 0; base1 < 1; base1++)
                     {
-                        queuelist.Add(SelectedString[e]);
-                    }
-                }
-
-                for (int e = 0; e < queuelist.Count(); e++)
-                {
-                    for (int ese = 1; ese < SelectedString.Count(); ese++)
-                    {
-                        double tempvalue = 0;
-                        int jmark = -1;
-                        if (String.IsNullOrEmpty(SelectedString[ese].selectedstring))
+                        for (int i = base1+1; i < z; i++)
                         {
-                            for (int j = 0; j < TessResult[ese].Count(); j++)
+                            value = 0;
+                            //double best = 0;
+                            //double bestindex = -1;
+                            int jmark = -1;
+                            for (int j = 0; j < TessResult[i].Count(); j++)
                             {
-                                //double tempS = Strabo.Core.TextRecognition.NeedlemanWunsch.findSimScore(queuelist[e], TessResult[ese][j].st);
-                                double tempS = nd.score(queuelist[e].selectedstring, TessResult[ese][j].st);
-                                double smithstemp = sm.score(queuelist[e].selectedstring, TessResult[ese][j].st);
-                                tempS = Math.Max(tempS, smithstemp);
-                                double distance = Math.Sqrt(Math.Pow((queuelist[e].xcord - TessResult[ese][j].xcord), 2) + Math.Pow((queuelist[e].ycord - TessResult[ese][j].ycord), 2));
- 
-                                if (tempS > tempvalue && TessResult[ese][j].st.Count() > mincharcount)
+                                if (!string.IsNullOrEmpty(TessResult[0][0].st) && !string.IsNullOrEmpty(TessResult[i][j].st))
                                 {
+                                    //double tempS = Strabo.Core.TextRecognition.NeedlemanWunsch.findSimScore(TessResult[0][0].st, TessResult[i][j].st);
+                                    double tempS = NeedlemanWunsch.findSimScore(TessResult[base1][0].st, TessResult[i][j].st);//nd.score(TessResult[0][0].st, TessResult[i][j].st);
+                                    double distance = Math.Sqrt(Math.Pow((TessResult[base1][0].xcord - TessResult[i][j].xcord), 2) + Math.Pow((TessResult[0][0].ycord - TessResult[i][j].ycord), 2));
+                                    double smithstemp = sm.score(TessResult[base1][0].st, TessResult[i][j].st);
+                                    tempS = Math.Max(tempS, smithstemp);
+                                    sm.explainScore(TessResult[base1][0].st, TessResult[i][j].st);
                                     if (distance < 300)
                                     {
-                                        tempvalue = tempS;
-                                        if (tempS >= (thredsholdvalue * 2 * queuelist[e].selectedstring.Count()))
+                                        if (tempS > value && TessResult[i][j].st.Count() > mincharcount)
                                         {
-                                            SelectedString[ese].selectedstring = TessResult[ese][j].st.Trim();
-                                            jmark = j;
-                                            SelectedString[ese].xcord = TessResult[ese][j].xcord;
-                                            SelectedString[ese].ycord = TessResult[ese][j].ycord;
+                                            //if (distance < 300)
+
+                                            //else
+                                            //  value = tempS - 2;
+
+                                            if (tempS >= (thredsholdvalue * 2 * TessResult[base1][0].st.Count()))
+                                            {
+                                                value = tempS;
+                                                SelectedString[i].selectedstring = TessResult[i][j].st.Trim();        // put string with the largest value into the list
+                                                jmark = j;
+                                                SelectedString[i].xcord = TessResult[i][j].xcord;
+                                                SelectedString[i].ycord = TessResult[i][j].ycord;
+                                            }
                                         }
+                                        /* else
+                                         {
+                                             String[] splitword1 = TessResult[0][0].st.Split(' ');
+                                             String[] splitword2 = TessResult[i][j].st.Split(' ');
+                                             List<String> foo1 = new List<string>();
+                                             List<String> foo2 = new List<string>();
+                                             for (int ti = 0; ti < splitword1.Count(); ti++)
+                                             {
+                                                 if (!splitword1[ti].Equals(""))
+                                                 {
+                                                     foo1.Add(splitword1[ti]);
+                                                 }
+                                             }
+                                             for (int ti = 0; ti < splitword2.Count(); ti++)
+                                             {
+                                                 if (!splitword2[ti].Equals(""))
+                                                 {
+                                                     foo2.Add(splitword2[ti]);
+                                                 }
+                                             }
+                                             if ((foo1.Count > 1 || foo2.Count > 1) && foo1.Count < 4 && foo2.Count < 4 )
+                                             {
+                                                 double maxmatch = 0;
+                                                 for (int index1 = 0; index1 < foo1.Count; index1++)
+                                                 {
+                                                     for (int index2 = 0; index2 < foo2.Count; index2++)
+                                                     {
+                                                         double insidetemp = Strabo.Core.TextRecognition.NeedlemanWunsch.findSimScore(foo1[index1], foo2[index2]);
+                                                         insidetemp *= (TessResult[0][0].st.Count() / foo1[index1].Count());
+                                                         if (insidetemp > maxmatch)
+                                                             maxmatch = insidetemp;
+                                                     }
+                                                 }
+                                                 if (maxmatch > value && TessResult[i][j].st.Count() > 3)
+                                                 {
+
+                                                     value = maxmatch;
+                                                     if (value >= (thredsholdvalue * 3 * TessResult[0][0].st.Count()))
+                                                     {
+                                                         SelectedString[i].selectedstring = TessResult[i][j].st.Trim();        // put string with the largest value into the list
+                                                         jmark = j;
+                                                     }
+                                                 }
+                                             }
+                                         }*/
                                     }
                                 }
-                               /* else
-                                {
-                                    String[] splitword1 = queuelist[e].Split(' ');
-                                    String[] splitword2 = TessResult[ese][j].st.Split(' ');
-                                    List<String> foo1 = new List<string>();
-                                    List<String> foo2 = new List<string>();
-                                    for (int ti = 0; ti < splitword1.Count(); ti++)
-                                    {
-                                        if (!splitword1[ti].Equals(""))
-                                        {
-                                            foo1.Add(splitword1[ti]);
-                                        }
-                                    }
-                                    for (int ti = 0; ti < splitword2.Count(); ti++)
-                                    {
-                                        if (!splitword2[ti].Equals(""))
-                                        {
-                                            foo2.Add(splitword2[ti]);
-                                        }
-                                    }
-                                    if ((foo1.Count > 1 || foo2.Count > 1) && foo1.Count < 4 && foo2.Count < 4)
-                                    {
-                                        double maxmatch = 0;
-                                        for (int index1 = 0; index1 < foo1.Count; index1++)
-                                        {
-                                            for (int index2 = 0; index2 < foo2.Count; index2++)
-                                            {
-                                                double insidetemp = Strabo.Core.TextRecognition.NeedlemanWunsch.findSimScore(foo1[index1], foo2[index2]);
-                                                insidetemp *= (queuelist[e].Count() / foo1[index1].Count());
-                                                if (insidetemp > maxmatch)
-                                                    maxmatch = insidetemp;
-                                            }
-                                        }
-                                        if (maxmatch > tempvalue && TessResult[ese][j].st.Count() > 3)
-                                        {
 
-                                            tempvalue = maxmatch;
-                                            if (tempvalue >= (thredsholdvalue * 3 * queuelist[e].Count()))
-                                            {
-                                                SelectedString[ese].selectedstring = TessResult[ese][j].st.Trim();        // put string with the largest value into the list
-                                                jmark = j;
-                                            }
-                                        }
-                                    }
-                                }*/
                             }
-                        }
-                        if (jmark >= 0)
-                        {
-                            TessResult[ese].RemoveAt(jmark);
+                            if (jmark >= 0)
+                                TessResult[i].RemoveAt(jmark);
+
                         }
                     }
-                }
-                queuelist.Clear(); 
+                    SelectedString[0].selectedstring = TessResult[0][0].st;
+
+                    // get all missing selectedstring
+                    for (int e = 1; e < SelectedString.Count(); e++)
+                    {
+                        if (!String.IsNullOrEmpty(SelectedString[e].selectedstring))
+                        {
+                            queuelist.Add(SelectedString[e]);
+                        }
+                    }
+
+                    for (int e = 0; e < queuelist.Count(); e++)
+                    {
+                        for (int ese = 1; ese < SelectedString.Count(); ese++)
+                        {
+                            double tempvalue = 0;
+                            int jmark = -1;
+                            if (String.IsNullOrEmpty(SelectedString[ese].selectedstring))
+                            {
+                                for (int j = 0; j < TessResult[ese].Count(); j++)
+                                {
+                                    //double tempS = Strabo.Core.TextRecognition.NeedlemanWunsch.findSimScore(queuelist[e], TessResult[ese][j].st);
+                                    double tempS = nd.score(queuelist[e].selectedstring, TessResult[ese][j].st);
+                                    double smithstemp = sm.score(queuelist[e].selectedstring, TessResult[ese][j].st);
+                                    //tempS = Math.Max(tempS, smithstemp);
+                                    double distance = Math.Sqrt(Math.Pow((queuelist[e].xcord - TessResult[ese][j].xcord), 2) + Math.Pow((queuelist[e].ycord - TessResult[ese][j].ycord), 2));
+
+                                    if (tempS > tempvalue && TessResult[ese][j].st.Count() > mincharcount)
+                                    {
+                                        if (distance < 300)
+                                        {
+                                            tempvalue = tempS;
+                                            if (tempS >= (thredsholdvalue * 2 * queuelist[e].selectedstring.Count()))
+                                            {
+                                                SelectedString[ese].selectedstring = TessResult[ese][j].st.Trim();
+                                                jmark = j;
+                                                SelectedString[ese].xcord = TessResult[ese][j].xcord;
+                                                SelectedString[ese].ycord = TessResult[ese][j].ycord;
+                                            }
+                                        }
+                                    }
+                                    /* else
+                                     {
+                                         String[] splitword1 = queuelist[e].Split(' ');
+                                         String[] splitword2 = TessResult[ese][j].st.Split(' ');
+                                         List<String> foo1 = new List<string>();
+                                         List<String> foo2 = new List<string>();
+                                         for (int ti = 0; ti < splitword1.Count(); ti++)
+                                         {
+                                             if (!splitword1[ti].Equals(""))
+                                             {
+                                                 foo1.Add(splitword1[ti]);
+                                             }
+                                         }
+                                         for (int ti = 0; ti < splitword2.Count(); ti++)
+                                         {
+                                             if (!splitword2[ti].Equals(""))
+                                             {
+                                                 foo2.Add(splitword2[ti]);
+                                             }
+                                         }
+                                         if ((foo1.Count > 1 || foo2.Count > 1) && foo1.Count < 4 && foo2.Count < 4)
+                                         {
+                                             double maxmatch = 0;
+                                             for (int index1 = 0; index1 < foo1.Count; index1++)
+                                             {
+                                                 for (int index2 = 0; index2 < foo2.Count; index2++)
+                                                 {
+                                                     double insidetemp = Strabo.Core.TextRecognition.NeedlemanWunsch.findSimScore(foo1[index1], foo2[index2]);
+                                                     insidetemp *= (queuelist[e].Count() / foo1[index1].Count());
+                                                     if (insidetemp > maxmatch)
+                                                         maxmatch = insidetemp;
+                                                 }
+                                             }
+                                             if (maxmatch > tempvalue && TessResult[ese][j].st.Count() > 3)
+                                             {
+
+                                                 tempvalue = maxmatch;
+                                                 if (tempvalue >= (thredsholdvalue * 3 * queuelist[e].Count()))
+                                                 {
+                                                     SelectedString[ese].selectedstring = TessResult[ese][j].st.Trim();        // put string with the largest value into the list
+                                                     jmark = j;
+                                                 }
+                                             }
+                                         }
+                                     }*/
+                                }
+                            }
+                            if (jmark >= 0)
+                            {
+                                TessResult[ese].RemoveAt(jmark);
+                            }
+                        }
+                    }
+                    queuelist.Clear();
                     // check dictionary
-               
+
                     //NEW FUNCTION
 
                     for (int e = 0; e < SelectedString.Count(); e++)
@@ -531,223 +540,227 @@ namespace StringComparison
                         {
 
                             List<String> templ = null;
-                           /* String select = SelectedString[e].selectedstring.Replace(" ", "");
-                            bool capflag = false;
-                            bool spiltflag = false;
-                            for(int i = 1; i < select.Length; i++){
-                                if (char.IsUpper(select[i]))
-                                {
-                                    capflag = !capflag;
-                                }
-                                else
-                                {
-                                    if (capflag)
-                                    {
-                                        spiltflag = true;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if (spiltflag)
-                            {
-                                var r = new Regex(@"
-                (?<=[A-Z])(?=[A-Z][a-z]) |
-                 (?<=[^A-Z])(?=[A-Z]) |
-                 (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
-                                string afterhandle = r.Replace(select, " ");
-                                String[] splitword = afterhandle.Split(' ');
-                                List<String> foo = new List<string>();
-                                for (int ti = 0; ti < splitword.Count(); ti++)
-                                {
-                                    if (!splitword[ti].Equals("") || splitword[ti].Length > 2)
-                                    {
-                                        foo.Add(splitword[ti]);
-                                    }
-                                }
-
-                                if (foo.Count() > 0)
-                                {
-                                    List<List<String>> temphold = new List<List<string>>();
-                                    foreach (String word in foo)
-                                    {
-                                        List<String> splittempstring = Strabo.Core.TextRecognition.CheckDictionaryElasticSearchTemp.getDictionaryWord(word.Trim(), 2);
-                                        if (splittempstring.Count > 50)
-                                        {
-                                            splittempstring.RemoveRange(50, splittempstring.Count - 51);
-                                        }
-
-                                        List<String> tempholdlist = new List<string>();
-                                        for (int ii = 0; ii < splittempstring.Count(); ii++)
-                                        {
-                                            tempholdlist.Add(splittempstring[ii]);
-                                        }
-                                        if(tempholdlist.Count > 0)
-                                            temphold.Add(tempholdlist);
-
-                                    }
-                                    List<String> tempstring = new List<string>();
-                                    templ = temphold[0];
-                                    for (int ii = 1; ii < temphold.Count; ii++)
-                                    {
-                                        for (int kk = 0; kk < temphold[ii].Count; kk++)
-                                        {
-                                            for (int jj = 0; jj < templ.Count; jj++)
-                                            {
-                                                tempstring.Add(templ[jj] + " " + temphold[ii][kk]);
-                                            }
-                                        }
-                                        templ.Clear();
-                                        templ.AddRange(tempstring);
-                                        tempstring.Clear();
-                                    }
-
-
-                                }
-                                templ.Count();
-                            }
-                            else
-                            {*/
-                                // SelectedString[e].listofword = CheckDictionaryElasticSearchTemp.getDictionaryWord(SelectedString[e].selectedstring, 2);
-                                templ = Strabo.Core.TextRecognition.CheckDictionaryElasticSearchTemp.getDictionaryWord(SelectedString[e].selectedstring.Replace(" ", ""), 2);
-                                //List<String> templ = new List<String>();
-                                if (templ.Count > 100)
-                                {
-                                    templ.RemoveRange(100, templ.Count - 101);
-                                }
-                                /* if (templ.Count() < 1)
+                            /* String select = SelectedString[e].selectedstring.Replace(" ", "");
+                             bool capflag = false;
+                             bool spiltflag = false;
+                             for(int i = 1; i < select.Length; i++){
+                                 if (char.IsUpper(select[i]))
                                  {
-                                     String[] splitword = SelectedString[e].selectedstring.Split(' ');
-                                     List<String> foo = new List<string>();
-                                     for (int ti = 0; ti < splitword.Count(); ti++)
+                                     capflag = !capflag;
+                                 }
+                                 else
+                                 {
+                                     if (capflag)
                                      {
-                                         if (!splitword[ti].Equals(""))
-                                         {
-                                             foo.Add(splitword[ti]);
-                                         }
+                                         spiltflag = true;
+                                         break;
                                      }
-                                     if (foo.Count() > 1)
+                                 }
+                             }
+
+                             if (spiltflag)
+                             {
+                                 var r = new Regex(@"
+                 (?<=[A-Z])(?=[A-Z][a-z]) |
+                  (?<=[^A-Z])(?=[A-Z]) |
+                  (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
+                                 string afterhandle = r.Replace(select, " ");
+                                 String[] splitword = afterhandle.Split(' ');
+                                 List<String> foo = new List<string>();
+                                 for (int ti = 0; ti < splitword.Count(); ti++)
+                                 {
+                                     if (!splitword[ti].Equals("") || splitword[ti].Length > 2)
                                      {
-                                         List<List<String>> temphold = new List<List<string>>();
-                                         foreach (String word in foo)
+                                         foo.Add(splitword[ti]);
+                                     }
+                                 }
+
+                                 if (foo.Count() > 0)
+                                 {
+                                     List<List<String>> temphold = new List<List<string>>();
+                                     foreach (String word in foo)
+                                     {
+                                         List<String> splittempstring = Strabo.Core.TextRecognition.CheckDictionaryElasticSearchTemp.getDictionaryWord(word.Trim(), 2);
+                                         if (splittempstring.Count > 50)
                                          {
-                                             List<String> splittempstring = CheckDictionaryElasticSearchTemp.getDictionaryWord(word, 2);
-                                             if (splittempstring.Count > 50)
-                                             {
-                                                 splittempstring.RemoveRange(50, splittempstring.Count - 51);
-                                             }
-                                            // Dictionary<String, Double> tempd = new Dictionary<string, double>();
-                                             List<String> tempholdlist = new List<string>();
-                                             for (int ii = 0; ii < splittempstring.Count(); ii++)
-                                             {
-                                                // float needlemanvalue = NeedlemanWunsch.findSimScore(word, splittempstring[ii]);
-                                                 //tempd.Add(splittempstring[ii], (needlemanvalue / SelectedString[e].selectedstring.Count()));
-                                                 tempholdlist.Add(splittempstring[ii]);
-                                             }
-                                             //SelectedString[e].listofsepword.Add(tempd);
+                                             splittempstring.RemoveRange(50, splittempstring.Count - 51);
+                                         }
+
+                                         List<String> tempholdlist = new List<string>();
+                                         for (int ii = 0; ii < splittempstring.Count(); ii++)
+                                         {
+                                             tempholdlist.Add(splittempstring[ii]);
+                                         }
+                                         if(tempholdlist.Count > 0)
                                              temphold.Add(tempholdlist);
-                                       
-                                         }
-                                         List<String> tempstring = new List<string>();
-                                         templ = temphold[0];
-                                         for (int ii = 1; ii < temphold.Count; ii++)
+
+                                     }
+                                     List<String> tempstring = new List<string>();
+                                     templ = temphold[0];
+                                     for (int ii = 1; ii < temphold.Count; ii++)
+                                     {
+                                         for (int kk = 0; kk < temphold[ii].Count; kk++)
                                          {
-                                             for(int kk = 0; kk < temphold[ii].Count; kk ++){
-                                                 for (int jj = 0; jj < templ.Count; jj++)
-                                                 {
-                                                     tempstring.Add(templ[jj]+ " "+temphold[ii][kk]);
-                                                 }
+                                             for (int jj = 0; jj < templ.Count; jj++)
+                                             {
+                                                 tempstring.Add(templ[jj] + " " + temphold[ii][kk]);
                                              }
-                                             templ.Clear();
-                                             templ.AddRange(tempstring);
-                                             tempstring.Clear();
                                          }
+                                         templ.Clear();
+                                         templ.AddRange(tempstring);
+                                         tempstring.Clear();
+                                     }
+
+
+                                 }
+                                 templ.Count();
+                             }
+                             else
+                             {*/
+                            // SelectedString[e].listofword = CheckDictionaryElasticSearchTemp.getDictionaryWord(SelectedString[e].selectedstring, 2);
+                            templ = Strabo.Core.TextRecognition.CheckDictionaryElasticSearchTemp.getDictionaryWord(SelectedString[e].selectedstring.Replace(" ", ""), 2);
+                            //List<String> templ = new List<String>();
+                            if (templ.Count > 100)
+                            {
+                                templ.RemoveRange(100, templ.Count - 101);
+                            }
+                            /* if (templ.Count() < 1)
+                             {
+                                 String[] splitword = SelectedString[e].selectedstring.Split(' ');
+                                 List<String> foo = new List<string>();
+                                 for (int ti = 0; ti < splitword.Count(); ti++)
+                                 {
+                                     if (!splitword[ti].Equals(""))
+                                     {
+                                         foo.Add(splitword[ti]);
+                                     }
+                                 }
+                                 if (foo.Count() > 1)
+                                 {
+                                     List<List<String>> temphold = new List<List<string>>();
+                                     foreach (String word in foo)
+                                     {
+                                         List<String> splittempstring = CheckDictionaryElasticSearchTemp.getDictionaryWord(word, 2);
+                                         if (splittempstring.Count > 50)
+                                         {
+                                             splittempstring.RemoveRange(50, splittempstring.Count - 51);
+                                         }
+                                        // Dictionary<String, Double> tempd = new Dictionary<string, double>();
+                                         List<String> tempholdlist = new List<string>();
+                                         for (int ii = 0; ii < splittempstring.Count(); ii++)
+                                         {
+                                            // float needlemanvalue = NeedlemanWunsch.findSimScore(word, splittempstring[ii]);
+                                             //tempd.Add(splittempstring[ii], (needlemanvalue / SelectedString[e].selectedstring.Count()));
+                                             tempholdlist.Add(splittempstring[ii]);
+                                         }
+                                         //SelectedString[e].listofsepword.Add(tempd);
+                                         temphold.Add(tempholdlist);
+                                       
+                                     }
+                                     List<String> tempstring = new List<string>();
+                                     templ = temphold[0];
+                                     for (int ii = 1; ii < temphold.Count; ii++)
+                                     {
+                                         for(int kk = 0; kk < temphold[ii].Count; kk ++){
+                                             for (int jj = 0; jj < templ.Count; jj++)
+                                             {
+                                                 tempstring.Add(templ[jj]+ " "+temphold[ii][kk]);
+                                             }
+                                         }
+                                         templ.Clear();
+                                         templ.AddRange(tempstring);
+                                         tempstring.Clear();
+                                     }
 
                                     
-                                     }
-                                     templ.Count();
-                                 }*/
+                                 }
+                                 templ.Count();
+                             }*/
                             //}
-                               for (int ii = 0; ii < templ.Count(); ii++)
+                            templ = templ.Distinct().ToList();
+                            for (int ii = 0; ii < templ.Count(); ii++)
+                            {
+                                double needlemanvalue = NeedlemanWunsch.findSimScore(SelectedString[e].selectedstring, templ[ii]);
+                                double needlemanvalue2 = nd.score(SelectedString[e].selectedstring, templ[ii]) + 15;
+                                double smithvalue = sm.score(SelectedString[e].selectedstring, templ[ii]);
+                                double tempv = (Math.Max(needlemanvalue2, needlemanvalue2) / (2 * SelectedString[e].selectedstring.Count()));
+                                if (needlemanvalue > 1.5 * templ[ii].Length)
                                 {
-                                    //double needlemanvalue = Strabo.Core.TextRecognition.NeedlemanWunsch.findSimScore(SelectedString[e].selectedstring, templ[ii]);
-                                    double needlemanvalue = nd.score(SelectedString[e].selectedstring, templ[ii]) + 15;
-                                    double smithvalue = sm.score(SelectedString[e].selectedstring, templ[ii]);
-                                    double tempv = (Math.Max(needlemanvalue, needlemanvalue) / (2 * SelectedString[e].selectedstring.Count()));
-                                    if (needlemanvalue > 9)
-                                    {
-                                        if (!SelectedString[e].listofword.ContainsKey(templ[ii]))
-                                            SelectedString[e].listofword.Add(templ[ii], tempv);
-                                    }
-
+                                    if (!SelectedString[e].listofword.ContainsKey(templ[ii]))
+                                        SelectedString[e].listofword.Add(templ[ii], tempv);
                                 }
-                      
+
+                            }
+
                         }
                     }
 
 
-                //check occurance
-                for (int e = 0; e < SelectedString.Count(); e++)
-                {
-                    if (!String.IsNullOrEmpty(SelectedString[e].selectedstring))
+                    //check occurance
+                    for (int e = 0; e < SelectedString.Count(); e++)
                     {
-                        if (SelectedString[e].listofword.Count() == 1)
+                        if (!String.IsNullOrEmpty(SelectedString[e].selectedstring))
                         {
-                            if (totallist.ContainsKey(SelectedString[e].listofword.First().Key))
-                                totallist[SelectedString[e].listofword.First().Key] += 1000;
-                            else
-                                totallist[SelectedString[e].listofword.First().Key] = 1000;
-                        }
-                        else if (SelectedString[e].listofword.Count() > 1)
-                        {
-                            foreach (var item in SelectedString[e].listofword)
+                            if (SelectedString[e].listofword.Count() == 1)
                             {
-                                if (totallist.ContainsKey(item.Key))
-                                    totallist[item.Key]+= item.Value;
+                                if (totallist.ContainsKey(SelectedString[e].listofword.First().Key))
+                                    totallist[SelectedString[e].listofword.First().Key] += 1000;
                                 else
-                                    totallist[item.Key] = item.Value;
+                                    totallist[SelectedString[e].listofword.First().Key] = 1000;
+                            }
+                            else if (SelectedString[e].listofword.Count() > 1)
+                            {
+                                foreach (var item in SelectedString[e].listofword)
+                                {
+                                    if (totallist.ContainsKey(item.Key))
+                                        totallist[item.Key] += item.Value;
+                                    else
+                                        totallist[item.Key] = item.Value;
+                                }
                             }
                         }
                     }
-                }
 
-                var sortedDict = from entry in totallist orderby entry.Value descending select entry;
-                sortedDict.ToDictionary(pair => pair.Key, pair => pair.Value);
+                    var sortedDict = from entry in totallist orderby entry.Value descending select entry;
+                    sortedDict.ToDictionary(pair => pair.Key, pair => pair.Value);
 
-                List<String> templist = new List<string>();                
-                Dictionary<String, double> tempdic = new Dictionary<string,double>();
-                foreach (var item in sortedDict)
-                {
-                    templist.Add(item.Key);
-                    
-                }
+                    List<String> templist = new List<string>();
+                    Dictionary<String, double> tempdic = new Dictionary<string, double>();
+                    foreach (var item in sortedDict)
+                    {
+                        templist.Add(item.Key);
 
-                if (templist.Count > 20)
-                {
-                    templist.RemoveRange(20, templist.Count - 21);
-                }
+                    }
 
-                for(int ind = 0; ind < templist.Count; ind++){
-                    tempdic.Add(templist[ind], 0);
-                    for(int indx = 0; indx < SelectedString.Count; indx++){
-                        if(!String.IsNullOrEmpty(SelectedString[indx].selectedstring)){
-                             tempdic[templist[ind]] += (nd.score(templist[ind], SelectedString[indx].selectedstring)  / (2 * templist[ind].Count()));
-                             //tempdic[templist[ind]] += (sm.score(templist[ind], SelectedString[indx].selectedstring)  / (2 * templist[ind].Count()));
+                    if (templist.Count > 20)
+                    {
+                        templist.RemoveRange(20, templist.Count - 21);
+                    }
+
+                    for (int ind = 0; ind < templist.Count; ind++)
+                    {
+                        tempdic.Add(templist[ind], 0);
+                        for (int indx = 0; indx < SelectedString.Count; indx++)
+                        {
+                            if (!String.IsNullOrEmpty(SelectedString[indx].selectedstring))
+                            {
+                                tempdic[templist[ind]] += (Convert.ToDouble(/*Strabo.Core.TextRecognition.NeedlemanWunsch.findSimScore(/**/nd.score(templist[ind], SelectedString[indx].selectedstring)) / (2 * templist[ind].Count()));
+                                //tempdic[templist[ind]] += (sm.score(templist[ind], SelectedString[indx].selectedstring)  / (2 * templist[ind].Count()));
+                            }
                         }
                     }
+
+                    var sortedDict2 = from entry in tempdic orderby entry.Value descending select entry;
+                    sortedDict2.ToDictionary(pair => pair.Key, pair => pair.Value);
+
+                    foreach (var item in sortedDict2)
+                    {
+                        temoutput.outputDic.Add(item.Key, item.Value);
+                    }
+
+                    OutputResult.Add(temoutput);
                 }
 
-                var sortedDict2 = from entry in tempdic orderby entry.Value descending select entry;
-                sortedDict2.ToDictionary(pair => pair.Key, pair => pair.Value);
-
-                foreach (var item in sortedDict2)
-                {
-                    temoutput.outputDic.Add(item.Key, item.Value);
-                }
-               
-                OutputResult.Add(temoutput);
-            } 
-               
                 TessResult[0].RemoveAt(0);
 
                 //clear everything
@@ -756,7 +769,7 @@ namespace StringComparison
 
 
             }
-
+            Log.WriteLine("END");
             Microsoft.Office.Interop.Excel.Application oXL;
             Microsoft.Office.Interop.Excel._Workbook oWB;
             Microsoft.Office.Interop.Excel._Worksheet oSheet;
@@ -797,7 +810,7 @@ namespace StringComparison
 
 
             OutputResult.Count();
-            Log.WriteLine("END");
+
             return resultlist;
 
         }
