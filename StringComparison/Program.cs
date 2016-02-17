@@ -448,6 +448,9 @@ namespace StringComparison
 
                     for (int e = 0; e < queuelist.Count(); e++)
                     {
+
+                        if (queuelist[e].selectedstring.Length <= 3)
+                            continue;
                         for (int ese = 1; ese < SelectedString.Count(); ese++)
                         {
                             double tempvalue = 0;
@@ -457,6 +460,8 @@ namespace StringComparison
                                 for (int j = 0; j < TessResult[ese].Count(); j++)
                                 {
                                     //double tempS = Strabo.Core.TextRecognition.NeedlemanWunsch.findSimScore(queuelist[e], TessResult[ese][j].st);
+                                    if (TessResult[ese][j].st.Length <= 3)
+                                        continue;
                                     double tempS = nd.score(queuelist[e].selectedstring, TessResult[ese][j].st);
                                     double smithstemp = sm.score(queuelist[e].selectedstring, TessResult[ese][j].st);
                                     //tempS = Math.Max(tempS, smithstemp);

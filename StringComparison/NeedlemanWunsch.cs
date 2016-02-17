@@ -118,7 +118,7 @@ namespace StringComparison
                         //else
                         //    tempAW = addWeights;
                         int scoreLeft = scoringMatrix[i, j - 1] + deleteWeights;// addWeights; //insert
-                        int scoreUp = scoringMatrix[i - 1, j] + addWeights;// deleteWeights; //delete
+                        int scoreUp = scoringMatrix[i - 1, j] + tempAW;// deleteWeights; //delete
                         //if(scoreUp)
                         int maxScore = Math.Max(Math.Max(scroeDiag, scoreLeft), scoreUp);
 						
