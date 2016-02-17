@@ -216,6 +216,7 @@ namespace StringComparison
                                         double ycord = 0;
                                         for (int jj = left_bound; jj < ii; jj++)
                                         {
+                                            //listnew.Add(new stringholder(te[jj].st, te[jj].xcord, te[jj].ycord))
                                             xcord += te[jj].xcord;
                                             ycord += te[jj].ycord;
                                         }
@@ -361,7 +362,7 @@ namespace StringComparison
                                     double distance = Math.Sqrt(Math.Pow((TessResult[base1][0].xcord - TessResult[i][j].xcord), 2) + Math.Pow((TessResult[0][0].ycord - TessResult[i][j].ycord), 2));
                                     double smithstemp = sm.score(TessResult[base1][0].st, TessResult[i][j].st);
                                     tempS = Math.Max(tempS, smithstemp);
-                                    sm.explainScore(TessResult[base1][0].st, TessResult[i][j].st);
+                                    //sm.explainScore(TessResult[base1][0].st, TessResult[i][j].st);
                                     if (distance < 300)
                                     {
                                         if (tempS > value && TessResult[i][j].st.Count() > mincharcount)
@@ -429,8 +430,8 @@ namespace StringComparison
                                 }
 
                             }
-                            if (jmark >= 0)
-                                TessResult[i].RemoveAt(jmark);
+                            //if (jmark >= 0)
+                            //    TessResult[i].RemoveAt(jmark);
 
                         }
                     }
@@ -524,7 +525,7 @@ namespace StringComparison
                             }
                             if (jmark >= 0)
                             {
-                                TessResult[ese].RemoveAt(jmark);
+                            //    TessResult[ese].RemoveAt(jmark);
                             }
                         }
                     }
@@ -620,10 +621,10 @@ namespace StringComparison
                             // SelectedString[e].listofword = CheckDictionaryElasticSearchTemp.getDictionaryWord(SelectedString[e].selectedstring, 2);
                             templ = Strabo.Core.TextRecognition.CheckDictionaryElasticSearchTemp.getDictionaryWord(SelectedString[e].selectedstring.Replace(" ", ""), 2);
                             //List<String> templ = new List<String>();
-                            if (templ.Count > 100)
-                            {
-                                templ.RemoveRange(100, templ.Count - 101);
-                            }
+                            //if (templ.Count > 100)
+                            //{
+                            //    templ.RemoveRange(100, templ.Count - 101);
+                            //}
                             /* if (templ.Count() < 1)
                              {
                                  String[] splitword = SelectedString[e].selectedstring.Split(' ');
@@ -683,7 +684,7 @@ namespace StringComparison
                                 double needlemanvalue = NeedlemanWunsch.findSimScore(SelectedString[e].selectedstring, templ[ii]);
                                 double needlemanvalue2 = nd.score(SelectedString[e].selectedstring, templ[ii]) + 15;
                                 double smithvalue = sm.score(SelectedString[e].selectedstring, templ[ii]);
-                                double tempv = (Math.Max(needlemanvalue2, needlemanvalue2) / (2 * SelectedString[e].selectedstring.Count()));
+                                double tempv = (Math.Max(needlemanvalue, needlemanvalue) / (2 * SelectedString[e].selectedstring.Count()));
                                 if (needlemanvalue > 1.5 * templ[ii].Length)
                                 {
                                     if (!SelectedString[e].listofword.ContainsKey(templ[ii]))
@@ -744,7 +745,7 @@ namespace StringComparison
                         {
                             if (!String.IsNullOrEmpty(SelectedString[indx].selectedstring))
                             {
-                                tempdic[templist[ind]] += (Convert.ToDouble(/*Strabo.Core.TextRecognition.NeedlemanWunsch.findSimScore(/**/nd.score(templist[ind], SelectedString[indx].selectedstring)) / (2 * templist[ind].Count()));
+                                tempdic[templist[ind]] += (Convert.ToDouble(NeedlemanWunsch.findSimScore(templist[ind], SelectedString[indx].selectedstring)) / (2 * templist[ind].Count()));
                                 //tempdic[templist[ind]] += (sm.score(templist[ind], SelectedString[indx].selectedstring)  / (2 * templist[ind].Count()));
                             }
                         }
