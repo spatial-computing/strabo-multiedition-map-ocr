@@ -19,15 +19,19 @@ namespace StringComparison
 
     class Program
     {
+        public static string areano = "15";
+
         static void Main(string[] args)
         {
             Strabo.Core.Utility.Log.SetLogDir(@"C:\Users\ronald\Documents\StringComparison\Input\");
             Log.WriteLine("begin");
             List<List<stringholder>> hack = new List<List<stringholder>>();
 
-            String[] folderpath = Directory.GetFiles(@"C:\Users\ronald\Documents\StringComparison\Input\Data");
+            String[] folderpath = Directory.GetFiles(@"C:\Users\ronald\Documents\StringComparison\Input\");
             foreach (String pathname in folderpath)
             {
+                if (!pathname.Contains(areano))
+                    continue;
                 List<stringholder> list1 = new List<stringholder>();
                 String tempread = System.IO.File.ReadAllText(pathname);
                 var tempob = JsonParser.Deserialize(tempread);
@@ -83,10 +87,15 @@ namespace StringComparison
 
             var settings = new ConnectionSettings(
     node,
-    defaultIndex: "frequency"
-);
+    defaultIndex: "frequency");
+
+
+            List<stringholder> temp_lsh = hack[0];
+            hack[0] = hack[2];
+            hack[2]=temp_lsh;
 
             ElasticClient client = new ElasticClient(settings);
+
             // group nearby strings into one
             for (int i = 0; i < hack.Count(); i++)
             {
@@ -117,7 +126,7 @@ namespace StringComparison
                                         double ydis = Math.Abs(tempstring.ycord - hack[i][k].ycord);
                                         double xthrs = Math.Max(tempstring.height, hack[i][k].height) * 4;
                                         //double ythrs = tempstring.height /5;
-                                        double ythrs = tempstring.height * 2;
+                                        double ythrs = tempstring.height;
                                         double heightratio = Math.Max(tempstring.height, hack[i][k].height) / Math.Min(tempstring.height, hack[i][k].height);
                                         if (ydis <= ythrs && xdis < xthrs && heightratio < 1.8)
                                         {
@@ -360,7 +369,7 @@ namespace StringComparison
                                     //double tempS = Strabo.Core.TextRecognition.NeedlemanWunsch.findSimScore(TessResult[0][0].st, TessResult[i][j].st);
                                     double tempS = NeedlemanWunsch.findSimScore(TessResult[base1][0].st, TessResult[i][j].st);//nd.score(TessResult[0][0].st, TessResult[i][j].st);
                                     double distance = Math.Sqrt(Math.Pow((TessResult[base1][0].xcord - TessResult[i][j].xcord), 2) + Math.Pow((TessResult[0][0].ycord - TessResult[i][j].ycord), 2));
-                                    double smithstemp = sm.score(TessResult[base1][0].st, TessResult[i][j].st);
+                                    double smithstemp = sm.score(TessResult[base1][0].st, TessResult[i][j].st)*0.7;
                                     tempS = Math.Max(tempS, smithstemp);
                                     //sm.explainScore(TessResult[base1][0].st, TessResult[i][j].st);
                                     if (distance < 300)
@@ -807,7 +816,7 @@ namespace StringComparison
 
             }
 
-            oWB.SaveAs(@"C:\Users\ronald\Documents\StringComparison\Output\result11.xls", Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookDefault, Type.Missing, Type.Missing,
+            oWB.SaveAs(@"C:\Users\ronald\Documents\StringComparison\Output\result"+Program.areano+".xls", Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookDefault, Type.Missing, Type.Missing,
         false, false, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange,
         Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
 
