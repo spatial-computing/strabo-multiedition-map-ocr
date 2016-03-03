@@ -19,7 +19,8 @@ namespace StringComparison
 
     class Program
     {
-        public static string areano = "15";
+        
+        public static string areano = "11";
 
         static void Main(string[] args)
         {
@@ -90,9 +91,9 @@ namespace StringComparison
     defaultIndex: "frequency");
 
 
-            List<stringholder> temp_lsh = hack[0];
-            hack[0] = hack[2];
-            hack[2]=temp_lsh;
+            //List<stringholder> temp_lsh = hack[0];
+            //hack[0] = hack[2];
+            //hack[2]=temp_lsh;
 
             ElasticClient client = new ElasticClient(settings);
 
@@ -369,7 +370,7 @@ namespace StringComparison
                                     //double tempS = Strabo.Core.TextRecognition.NeedlemanWunsch.findSimScore(TessResult[0][0].st, TessResult[i][j].st);
                                     double tempS = NeedlemanWunsch.findSimScore(TessResult[base1][0].st, TessResult[i][j].st);//nd.score(TessResult[0][0].st, TessResult[i][j].st);
                                     double distance = Math.Sqrt(Math.Pow((TessResult[base1][0].xcord - TessResult[i][j].xcord), 2) + Math.Pow((TessResult[0][0].ycord - TessResult[i][j].ycord), 2));
-                                    double smithstemp = sm.score(TessResult[base1][0].st, TessResult[i][j].st)*0.7;
+                                    double smithstemp = sm.score(TessResult[base1][0].st, TessResult[i][j].st)*0.9;
                                     tempS = Math.Max(tempS, smithstemp);
                                     //sm.explainScore(TessResult[base1][0].st, TessResult[i][j].st);
                                     if (distance < 300)
@@ -816,7 +817,7 @@ namespace StringComparison
 
             }
 
-            oWB.SaveAs(@"C:\Users\ronald\Documents\StringComparison\Output\result"+Program.areano+".xls", Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookDefault, Type.Missing, Type.Missing,
+            oWB.SaveAs(@"C:\Users\ronald\Documents\StringComparison\Output\result"+Program.areano.Substring(0,2)+".xls", Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookDefault, Type.Missing, Type.Missing,
         false, false, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange,
         Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
 

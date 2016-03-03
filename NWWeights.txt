@@ -44,3 +44,5 @@ m in
 in m
 ri n
 n ri
+1 i
+i 1

@@ -12,7 +12,7 @@ namespace StringComparison
         static int excelrowNo;
         static int matchcharcount;
         static int initialWeights = -2;
-        static int deleteWeights = -3;
+        static int deleteWeights = -5;
         static int editWeights = -1;
         static int addWeights = -2;
         static int matchWeights = 3;
@@ -25,7 +25,7 @@ namespace StringComparison
 
             for (int i = 0; i < alineSeqCnt; i++)
             {
-                    scoringMatrix[i, 0] = initialWeights;
+                scoringMatrix[i, 0] = initialWeights;
             }
 
             for (int j = 0; j < refSeqCnt; j++)
@@ -113,10 +113,7 @@ namespace StringComparison
                         int tempAW=addWeights;
                         if (refSeqCnt > alineSeqCnt && (first_match < 0 || i - first_match +1 > alineSeqCnt))
                             tempAW = 0;
-                        //if (j > alineSeqCnt)
-                        //    tempAW = 0;
-                        //else
-                        //    tempAW = addWeights;
+                        
                         int scoreLeft = scoringMatrix[i, j - 1] + deleteWeights;// addWeights; //insert
                         int scoreUp = scoringMatrix[i - 1, j] + tempAW;// deleteWeights; //delete
                         //if(scoreUp)
